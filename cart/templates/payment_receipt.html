@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Phiếu thanh toán
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-5 text-center border-bottom">Phiếu Thanh Toán</h2>
+    <div class="row my-4">
+        <div class="col-md-6">
+            <h3>Thông Tin Đơn Hàng</h3>
+            <p><strong>Họ và Tên:</strong> {{ order.full_name }}</p>
+            <p><strong>Số Điện Thoại:</strong> {{ order.phone_number }}</p>
+            <p><strong>Địa Chỉ:</strong> {{ order.address }}</p>
+            <p><strong>Tỉnh/Thành Phố:</strong> {{ order.province }}</p>
+            <p><strong>Quận/Huyện:</strong> {{ order.district }}</p>
+            <p><strong>Phương Thức Vận Chuyển:</strong> {{ order.shipping_method }}</p>
+            <p><strong>Phương Thức Thanh Toán:</strong> {{ order.payment_method }}</p>
+        </div>
+        <div class="col-md-6">
+            <h3>Các Mặt Hàng Đã Đặt</h3>
+            <ul class="list-group">
+                {% for item in order.ordereditem_set.all %}
+                <li class="list-group-item">{{ item.product.name }} - {{ item.quantity }} x {{ item.price }}</li>
+                {% endfor %}
+            </ul>
+            <p class="mt-3"><strong>Tổng Giá:</strong> {{ total_price }}</p>
+        </div>
+    </div>
+    <div class="alert alert-warning mt-4 text-center" role="alert">
+       Thanh toán thành công <a href="{% url 'products:all_products' %}" class="alert-link">Tiếp tục mua sắn</a>.
+    </div>
+</div>
+{% endblock %}

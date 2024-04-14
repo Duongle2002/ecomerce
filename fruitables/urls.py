@@ -24,6 +24,10 @@ urlpatterns = [
     path("api/v1/", include('user.urls')),
     path('api/v1/', include('djoser.urls')),
     path('api/v1/', include('djoser.urls.jwt')),
+    
+    
+    path('', include('homeapp.urls')),
+    path('cart/', include('cart.urls')),
     # Swagger
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

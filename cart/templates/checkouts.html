@@ -1,0 +1,167 @@
+{% extends "bases.html" %}
+{% load static %}
+{% block title  %}
+    MiPlan Thanh toán đơn hàng
+{% endblock title  %}
+{% block view_cart %}
+<div class="container">
+    <div class="row my-5 ">
+        <div class="col-7 border-end">
+        <h2>Mi Plan</h2>
+            <h4 class="mt-3">Thông tin giao hàng</h4>
+           
+               
+                    {% if user.is_authenticated %}
+                    <div class="card mb-3 border border-0 mt-3" style="max-width: 540px;">
+                        <div class="row g-0">
+                          <div class="col-md-4">
+                            <img src="https://res.cloudinary.com/duuzl8vye/image/upload/v1713024917/ssvrli6upjk8c5erc5ui.png" class="img-fluid rounded-start" alt="...">
+                          </div>
+                          <div class="col-md-8">
+                            <div class="card-body text-center">
+                              <p class="card-title">User name: {{ user.username }} ( <span class="fst-italic"> {{ user.email }}</span> )</p>
+                              <a class="btn icon-link icon-link-hover"
+                                    href="{% url 'users:logout' %}"><i class="bi bi-box-arrow-left"></i> Đăng xuất</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                        <img src="" alt="" style="width:5rem">
+                         <!-- Hiển thị tên người dùng -->
+                        
+                    {% else %}
+                        <a href="{% url 'users:login' %}">Đăng Nhập</a> <!-- Liên kết đến trang đăng nhập -->
+                    {% endif %}
+            
+                    <div class="container mb-5">
+                      <h2>Thông tin giao hàng</h2>
+                      <form id="orderForm" method="post" action="{% url 'cart:submit_order' %}">
+                        {% csrf_token %}
+                          <div class="mb-3">
+                              <label for="full_name" class="form-label">Họ và tên:</label>
+                              <input type="text" class="form-control" id="full_name" name="full_name" required>
+                          </div>
+                          
+                          <div class="mb-3">
+                              <label for="phone_number" class="form-label">Số điện thoại:</label>
+                              <input type="tel" class="form-control" id="phone_number" name="phone_number" required>
+                          </div>
+                          
+                          <div class="mb-3">
+                              <label for="address" class="form-label">Địa chỉ:</label>
+                              <input type="text" class="form-control" id="address" name="address" required>
+                          </div>
+                          
+                          <div class="mb-3">
+                              <label for="province" class="form-label">Tỉnh/Thành phố:</label>
+                              <select class="form-select" id="province" name="province" required>
+                                  <option value="">Chọn tỉnh/thành phố</option>
+                                  <!-- Tùy chọn tỉnh/thành phố sẽ được thêm bằng JavaScript -->
+                              </select>
+                          </div>
+                          
+                          <div class="mb-3">
+                              <label for="district" class="form-label">Quận/Huyện:</label>
+                              <select class="form-select" id="district" name="district" required>
+                                  <option value="">Chọn quận/huyện</option>
+                                  <!-- Tùy chọn quận/huyện sẽ được thêm bằng JavaScript -->
+                              </select>
+                          </div>
+                          
+                          <div class="mb-3">
+                              <label for="shipping_method" class="form-label">Phương thức vận chuyển:</label>
+                              <select class="form-select" id="shipping_method" name="shipping_method" required>
+                                  <option value="standard">Vận chuyển tiêu chuẩn</option>
+                                  <option value="express">Vận chuyển nhanh</option>
+                              </select>
+                          </div>
+                          
+                          <div class="mb-3">
+                              <label for="payment_method" class="form-label">Phương thức thanh toán:</label>
+                              <select class="form-select" id="payment_method" name="payment_method" required>
+                                  <option value="cash_on_delivery">Thanh toán khi giao hàng</option>
+                                  <option value="bank_transfer">Chuyển khoản qua ngân hàng</option>
+                              </select>
+                          </div>
+                          
+                  </div>
+                </div>
+        
+        
+        
+                  <div class="col-5">
+          
+
+            <ul class="list-group mt-4 list-group-flush border-end">
+                {% for item in cart_items %}
+                <li class="list-group-item ">
+                    <div class="row align-items-center">
+                        <div class="col text-lowercase">{{ item.product.name }}</div>
+                        <div class="col-auto price">{{ item.total_price|floatformat:0 }} ₫</div>
+                    </div>
+                </li>
+                {% endfor %}
+                <div class="row align-items-center mt-5 px-4">
+                  <div class="col ">Tạm tính</div>
+                  <div class="col-auto price">{{ total_price|floatformat:0 }} ₫</div>
+                </div>
+                <div class="row align-items-center px-4">
+                    <div class="col ">Phí vận chuyển</div>
+                    <div class="col-auto price">Miễn phí</div>
+                </div>
+
+                <div class="row align-items-center mt-5 px-4">
+                  <div class="col ">Tổng cộng:</div>
+                  <div class="col-auto price">{{ total_price|floatformat:0 }} ₫</div>
+              </div>
+            </ul>
+            
+            <button type="submit" class="btn btn-primary float-end px-5 mt-5">Xác nhận đơn hàng</button>
+
+        </form>
+  
+    </div>
+</div>    
+{% endblock  %}
+
+{% block script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var provinces = {
+        "province1": ["Quận/Huyện 1", "Quận/Huyện 2", "Quận/Huyện 3"],
+        "province2": ["Quận/Huyện 4", "Quận/Huyện 5", "Quận/Huyện 6"],
+        // Thêm các tỉnh/thành phố khác và các quận/huyện tương ứng ở đây
+    };
+
+    var provinceSelect = document.getElementById('province');
+    var districtSelect = document.getElementById('district');
+
+    // Hàm để cập nhật các quận/huyện khi tỉnh/thành phố được chọn
+    function updateDistricts() {
+        districtSelect.innerHTML = '';
+        var selectedProvinceId = provinceSelect.value;
+        var districts = provinces[selectedProvinceId] || [];
+        districts.forEach(function (districtName) {
+            var option = document.createElement('option');
+            option.textContent = districtName;
+            districtSelect.appendChild(option);
+        });
+    }
+
+    // Thêm các tùy chọn tỉnh/thành phố vào menu dropdown
+    for (var provinceId in provinces) {
+        var option = document.createElement('option');
+        option.value = provinceId;
+        option.textContent = "Tỉnh/Thành phố " + provinceId.slice(-1); // Lấy số cuối cùng từ provinceId
+        provinceSelect.appendChild(option);
+    }
+
+    // Gọi hàm cập nhật quận/huyện khi tỉnh/thành phố được thay đổi
+    provinceSelect.addEventListener('change', updateDistricts);
+
+    // Khởi tạo danh sách quận/huyện ban đầu
+    updateDistricts();
+});
+
+</script>
+{% endblock  %}

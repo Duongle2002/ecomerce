@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title  %}
+    Cart
+{% endblock title  %}
+    {% block content %}
+    
+    <div class="container">
+        <h1 class="mt-5">Cart</h1>
+        {% if cart_items %}
+        <div class="row">
+
+        <ul class="list-group mt-4 col-8 list-group-flush border-end">
+            {% for item in cart_items %}
+            <li class="list-group-item ">
+                <div class="row align-items-center">
+                    <div class="col">{{ item.product.name }}</div>
+                    <div class="col-auto price">{{ item.total_price|floatformat:0 }} ₫</div>
+
+                    <div class="col-auto">
+                        <div class="input-group">
+                            <button class="btn icon-link icon-link-hover decrease-quantity text-danger" data-item-id="{{ item.id }}">
+                                    <i class="bi bi-dash-lg" ></i></button>
+
+                                <span class="input-group-text border border-0 quantity" id="quantity{{ item.id }}">{{ item.quantity }}</span>
+
+                            <button class="btn icon-link icon-link-hover increase-quantity text-danger"  data-item-id="{{ item.id }}">
+                                    <i class="bi bi-plus-lg"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <form action="{% url 'cart:remove_from_cart' item.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn icon-link icon-link-hover" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                                <i class="bi bi-trash3" aria-hidden="true"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        
+        <div class="mt-4 col-4 text-center border-start">
+            <h2>Tổng tiền</h2>
+            <h4 class="fw-bold mt-5"  id="totalPrice"></h4>
+            <a href="{% url 'cart:checkout' %}" class= "btn btn-outline-success mt-5 card"> Thanh toán ngay</a>
+        </div>
+        <div class="my-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Ghi chú đơn hàng</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+        <button onclick="goBack()" class="btn mt-4 bg-info text-white cards " >Tiếp tục mua sắm</button>
+    </div>
+        {% else %}
+        <div class="alert alert-warning mt-4" role="alert">
+            Giỏ hàng của bạn đang trống. Hãy <a href="{% url 'products:all_products' %}" class="alert-link">quay lại mua hàng</a>.
+        </div>
+        {% endif %}
+    </div>
+    {% endblock  %}
+
+   {% block script  %}
+   <script>
+    function goBack() {
+        window.history.back();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var totalPriceSpan = document.getElementById("totalPrice");
+        var totalValue = 0;
+
+        function updateTotalPrice() {
+            var items = document.querySelectorAll(".list-group-item");
+            totalValue = 0;
+
+            items.forEach(function(item) {
+                var quantity = parseInt(item.querySelector(".quantity").textContent);
+                var pricePerItem = parseFloat(item.querySelector(".price").textContent);
+                        
+                if (!isNaN(quantity) && !isNaN(pricePerItem)) {
+                    totalValue += quantity * pricePerItem;
+                }
+            });
+
+            // Định dạng số tiền thành chuẩn tiền tệ (VND)
+            var formattedTotalPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalValue);
+            totalPriceSpan.textContent = formattedTotalPrice;
+        }
+                
+        document.querySelectorAll('.decrease-quantity').forEach(button => {
+            button.addEventListener('click', () => {
+                var itemId = button.getAttribute('data-item-id');
+                var quantitySpan = document.querySelector("#quantity" + itemId);
+                var currentValue = parseInt(quantitySpan.textContent);
+
+                if (currentValue > 1) {
+                    quantitySpan.textContent = currentValue - 1;
+                    updateTotalPrice();
+                } else {
+                    var confirmation = confirm("Số lượng sản phẩm giảm về 0. Bạn có muốn xóa sản phẩm ra khỏi giỏ hàng không?");
+                    if (confirmation) {
+                        var form = button.closest("li").querySelector("form");
+                        form.submit();
+                    }
+                }
+            });
+        });
+
+        document.querySelectorAll('.increase-quantity').forEach(button => {
+            button.addEventListener('click', () => {
+                var itemId = button.getAttribute('data-item-id');
+                var quantitySpan = document.querySelector("#quantity" + itemId);
+                var currentValue = parseInt(quantitySpan.textContent);
+
+                quantitySpan.textContent = currentValue + 1;
+                updateTotalPrice();
+            });
+        });
+
+        updateTotalPrice();
+    });
+</script>
+
+   {% endblock  %}

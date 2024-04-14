@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}
+    Product Detail
+{% endblock title %}
+{% block content %}
+<div class="container">
+    <button onclick="goBack()" class="btn btn-lg"><i class="bi bi-arrow-left">Quay lại</i></button>
+<div class="row mt-3">
+    <div class="col-6 ms-4" style = "max-width:30rem">
+        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" >
+            <div class="carousel-inner" >
+                <!-- Lặp qua danh sách các ảnh từ model homeimg -->
+                {% for image in product_images %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}" >
+                    <!-- Sử dụng thuộc tính image.image.url để lấy URL của ảnh từ model -->
+                    <img src="{{image.image_url}}" class="d-block w-100 " alt="{{ image.name }}" >
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        
+
+    </div>
+    <div class="col-6">
+        <h2>{{ product.name }}</h2>
+        <p> Thương Hiệu {{ product.thumbnail }}</p>
+        <p>Loại: {{ product.category_id.name }}</p>
+        {% if product.is_public %}
+                <p>Tình Trạng: Còn hàng</p>
+            {% else %}
+                <p>Tình Trạng: Hết hàng</p>
+        {% endif %}
+        <p>Kho: {{ product.amount }}</p>
+        <p  class="pe-5 text-truncate" ">{{ product.detail }}</p>
+       
+        <div class="row mt-4">
+            <div class="col-6">
+                <h3>Số Lượng</h3>
+                <div class="input-group">
+                    <button class="btn btn-outline-primary" id="decreaseQuantity">-</button>
+                    <input type="text" class="form-control text-center" id="quantity" value="1">
+                    <button class="btn btn-outline-primary" id="increaseQuantity">+</button>
+                </div>
+            </div>
+            <div class="col-6">
+                <h3>Giá: {{ product.price|floatformat:0 }}  ₫</h3>
+                <button class="btn btn-primary" id="addToCart">Thêm vào giỏ hàng</button>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-8">
+            <h2>Giới Thiệu Sản Phẩm</h2>
+            <p  class="text-star ps-5">{{ product.detail }}</p>
+
+        </div>
+        <div class="col-4">
+            <h2>Product Reviews</h2>
+        </div>
+    </div>
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    // Lấy các phần tử HTML cần thiết
+    const decreaseButton = document.getElementById('decreaseQuantity');
+    const increaseButton = document.getElementById('increaseQuantity');
+    const quantityInput = document.getElementById('quantity');
+    const addToCartButton = document.getElementById('addToCart');
+
+    // Xử lý sự kiện khi bấm vào nút giảm số lượng
+    decreaseButton.addEventListener('click', () => {
+        let currentValue = parseInt(quantityInput.value);
+        if (currentValue > 1) {
+            quantityInput.value = currentValue - 1;
+        }
+    });
+
+    // Xử lý sự kiện khi bấm vào nút tăng số lượng
+    increaseButton.addEventListener('click', () => {
+        let currentValue = parseInt(quantityInput.value);
+        quantityInput.value = currentValue + 1;
+    });
+
+    // Xử lý sự kiện khi bấm vào nút thêm vào giỏ hàng
+    addToCartButton.addEventListener('click', () => {
+        const quantity = parseInt(quantityInput.value);
+        const productId = {{ product.id }};  // Thay id sản phẩm vào đây
+        const productPrice = {{ product.price }}; 
+        
+        fetch('/cart/add-to-cart/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',  // Thay csrf_token bằng mã CSRF token của bạn
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                quantity: quantity,
+                price : productPrice,
+            }),
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Sản phẩm đã được thêm vào giỏ hàng!');
+            } else {
+                alert('Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng!');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+{% endblock %}

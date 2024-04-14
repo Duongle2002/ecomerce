@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    Products
+{% endblock title %}
+{% block content %}
+<div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <!-- Lặp qua danh sách các ảnh từ model homeimg -->
+        {% for image in carosel %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <!-- Sử dụng thuộc tính image.image.url để lấy URL của ảnh từ model -->
+            <img src="{{image.image }}" class="d-block w-100 img-30" alt="{{ image.name }}">
+        </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<div class=" mt-4">
+    <div class="mb-3">
+        <nav class="nav">
+            <a href="{% url 'products:all_products' %}" class="nav-link">Tất cả sản phẩm</a>
+            <a href="{% url 'products:filtered_products' %}?category=1" class="nav-link">Ưa Mát</a>
+            <a href="{% url 'products:filtered_products' %}?category=2" class="nav-link">Nhiều nắng</a>
+            <a href="{% url 'products:filtered_products' %}?category=4" class="nav-link">Ít nắng</a>
+            <a href="{% url 'products:filtered_products' %}?category=5" class="nav-link">Mọng Nước</a>
+            <a href="{% url 'products:filtered_products' %}?category=6" class="nav-link">Khác</a>
+        </nav>
+        {% if products %}
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for product in products %}
+            <div class="col">
+                <div class="card h-100 product-card">
+                    
+                        {% with product.product_images.first as image %}
+                        {% if image %}
+                            <img src="{{ image.image_url }}" class="card-img-top" alt="Product Image">
+                        {% else %}
+                            <!-- Nếu không có hình ảnh, bạn có thể hiển thị một hình ảnh mặc định hoặc thông báo rằng không có hình ảnh -->
+                            <img src="{% static 'path_to_default_image.jpg' %}" class="card-img-top" alt="Default Image">
+                        {% endif %}
+                        {% endwith %}
+                        <div class="card-body">
+                            <p class="card-text">{{ product.name }}</p>
+                            <p class="card-text">{{ product.price|floatformat:0 }} ₫</p>
+                        </div>
+                        <div class="overlay">
+                            <a href="{% url 'products:product_detail' product.id %}" class="btn btn-primary link-offset-2 link-underline link-underline-opacity-0">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-center"></p>
+        <div class="alert alert-warning my-4 text-center" role="alert">
+            Sản phẩm đang cập nhật. Vui lòng quay lại sau!
+        </div>
+        {% endif %}
+    </div>
+    </div>
+</div>
+</div>
+{% endblock content %}

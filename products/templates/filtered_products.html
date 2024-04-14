@@ -1,0 +1,27 @@
+{% extends "product.html" %}
+{% load static %}
+{% block title  %}
+    about
+{% endblock title  %}
+{% block products %}
+
+<div class="row row-cols-1 row-cols-md-4 g-4">
+    {% for product in products %}
+    <div class="col">
+        <div class="card h-100">
+            <a href="{% url 'product_detail' product.id %}">
+            <img src="{{ product.thumbnail }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <p class="card-text">{{ product.name }}</p>
+                <p class="card-text">{{ product.price|floatformat:0 }} ₫</p>
+            </div>
+        </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock  %}
+
+
+

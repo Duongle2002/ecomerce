@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title  %}
+    Home
+{% endblock title  %}
+{% block content %}
+    <div>
+      <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <!-- Lặp qua danh sách các ảnh từ model homeimg -->
+            {% for image in images %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <!-- Sử dụng thuộc tính image.image.url để lấy URL của ảnh từ model -->
+                <img src="{{image.image }}" class="d-block w-100 img-30" alt="{{ image.name }}">
+            </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    
+    <div class="row">
+        <h1 class="mt-4">Danh mục nổi bật</h1>
+        <!-- Dùng vòng lặp for để duyệt qua danh sách các đối tượng từ model -->
+        {% for item in upsets %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="row g-0">
+                    <!-- Hình ảnh bên trái -->
+                    <div class="col-md-5">
+                        <img src="{{ item.image }}" class="img-fluid rounded-start" alt="{{ item.title }}">
+                    </div>
+                    <!-- Thẻ chứa thông tin của card -->
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <!-- Hiển thị tiêu đề của card từ dữ liệu của mỗi đối tượng -->
+                            <h5 class="card-title">{{ item.title }}</h5>
+                            <!-- Hiển thị nội dung của card từ dữ liệu của mỗi đối tượng -->
+                            <p class="card-text">{{ item.body }}</p>
+                            <p class="card-text"><small class="text-muted"></small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+  
+                    <div>
+                      <h1>Cây phổ biến</h1>
+                      <div class="row row-cols-1 row-cols-md-5 g-4">
+                          {% for product in popular_products %}
+                          <div class="col">
+                            <div class="card h-100">
+                                <a href="{% url 'products:product_detail' product.id %}" class=" link-offset-2 link-underline link-underline-opacity-0">
+                                    {% with product.product_images.first as image %}
+                                    {% if image %}
+                                        <img src="{{ image.image_url }}" class="card-img-top" alt="Product Image">
+                                    {% else %}
+                                        <!-- Nếu không có hình ảnh, bạn có thể hiển thị một hình ảnh mặc định hoặc thông báo rằng không có hình ảnh -->
+                                        <img src="{% static 'path_to_default_image.jpg' %}" class="card-img-top" alt="Default Image">
+                                    {% endif %}
+                                {% endwith %}
+                                <div class="card-body">
+                                    <p class="card-text ">{{ product.name }}</p>
+                                    <p class="card-text ">{{ product.price|floatformat:0 }}₫  </p>
+                                </div>
+                            </a>
+                            </div>
+                        </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                  <div class="row">
+                      <h1 class="mt-4 caydeban">Cây mini để bàn</h1>
+                      <div class="col-6">
+                          <div class="card mb-3" style="max-width: 540px;">
+                              <img src="{{ mini_desktop_plant.product_images }}" class="img-fluid rounded-start" alt="...">
+                          </div>
+                      </div>
+                      <div class="col-6">
+                          <div class="row row-cols-1 row-cols-md-2 g-4">
+                              {% for product in mini_desktop_plants %}
+                              <div class="col">
+                                <div class="card h-100">
+                                    <a href="{% url 'products:product_detail' product.id %}" class=" link-offset-2 link-underline link-underline-opacity-0">
+                                        {% with product.product_images.first as image %}
+                                        {% if image %}
+                                            <img src="{{ image.image_url }}" class="card-img-top" alt="Product Image">
+                                        {% else %}
+                                            <!-- Nếu không có hình ảnh, bạn có thể hiển thị một hình ảnh mặc định hoặc thông báo rằng không có hình ảnh -->
+                                            <img src="{% static 'path_to_default_image.jpg' %}" class="card-img-top" alt="Default Image">
+                                        {% endif %}
+                                    {% endwith %}
+                                    <div class="card-body">
+                                        <p class="card-text ">{{ product.name }}</p>
+                                        <p class="card-text ">{{ product.price|floatformat:0 }}₫  </p>
+                                    </div>
+                                </a>
+                                </div>
+                            </div>
+                              {% endfor %}
+                          </div>
+                      </div>
+                  </div>
+
+
+                              
+                  <div>
+                    <h1>Cây trong nhà</h1>
+                    <!-- Hiển thị sản phẩm banner cho cây trong nhà -->
+                    <img src="{{ indoor_plant_banner.product_images }}" alt="Indoor Plant Banner">
+                    <div class="row row-cols-1 row-cols-md-4 g-4">
+                        {% for product in indoor_plants %}
+                        <div class="col">
+                          <div class="card h-100">
+                              <a href="{% url 'products:product_detail' product.id %}" class=" link-offset-2 link-underline link-underline-opacity-0">
+                                  {% with product.product_images.first as image %}
+                                  {% if image %}
+                                      <img src="{{ image.image_url }}" class="card-img-top" alt="Product Image">
+                                  {% else %}
+                                      <!-- Nếu không có hình ảnh, bạn có thể hiển thị một hình ảnh mặc định hoặc thông báo rằng không có hình ảnh -->
+                                      <img src="{% static 'path_to_default_image.jpg' %}" class="card-img-top" alt="Default Image">
+                                  {% endif %}
+                              {% endwith %}
+                              <div class="card-body">
+                                  <p class="card-text ">{{ product.name }}</p>
+                                  <p class="card-text ">{{ product.price|floatformat:0 }}₫  </p>
+                              </div>
+                          </a>
+                          </div>
+                      </div>
+                        {% endfor %}
+                    </div>
+                  </div>
+        
+
+                <div>
+                    <div class="card mb-3 mt-4" >
+                        <div class="row g-0">
+                          <div class="col-md-8">
+                            <div class="card-body">
+                              <h5 class="card-title">Về chúng tôi</h5>
+                              <p class="card-text">Chào mừng đến với MewPlant, nơi mang đến cho bạn niềm đam mê và sự thư thái từ thế giới cây cảnh, cây xanh và cây mini để bàn. Với mong muốn lan tỏa vẻ đẹp tự nhiên và tạo nên một không gian sống xanh mát, chúng tôi tự hào là một trong những vườn ươm hàng đầu chuyên cung cấp các loại cây cảnh chất lượng cao.</p>
+                            </div>
+                          </div>
+                          
+                          <div class="col-md-4">
+                            <img src="https://file.hstatic.net/200000815931/file/m_about_f4f0bbccb1ce4740b16ad50b16286e71.jpg" class="img-fluid rounded-start" alt="...">
+                          </div>
+                        </div>
+                      </div>
+                </div>
+                  
+    </div>
+{% endblock content %}

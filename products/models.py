@@ -5,6 +5,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.conf import settings
+import cloudinary.uploader
 
 
 class Category(models.Model):
@@ -23,29 +24,25 @@ class Category(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     # delete_at dùng để soft delete
     deleted_at = models.DateTimeField(null=True)
+    
 
 
 class Product(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     unit = models.CharField(max_length=3)
-    # Sử dụng FloatField, IntegerField để tạo trường kiểu số
+    detail = models.TextField(null = True)
     price = models.FloatField()
     discount = models.IntegerField()
     amount = models.IntegerField()
-    # Sử dụng BooleanField để tạo trường kiểu boolean true / false
-    is_public = models.BooleanField()
+    is_public = models.BooleanField(null=True)
     thumbnail = models.CharField(max_length=128)
-    # sử dụng ForeignKey để khai báo một field là khóa ngoại từ một bảng khác
-    # on_delete=models.CASCADE để mô tả khi bảng category bị xóa một record...
-    # thì tất cả record product có id tương ứng sẽ bị xóa theo
-    # related_name thể hiện khi query ở bảng category...
-    # tất cả các record product con sẽ được hiển thị trong một mảng có tên là products
-    category_id = models.ForeignKey(Category, on_delete=models.CASCADE,
-                                    related_name='products', null=False)
+    category_id = models.ForeignKey(Category, on_delete=models.CASCADE,related_name='products', null=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(null=True)
+    deleted_at = models.DateTimeField(default=None,null=True)
+    def __str__(self):
+        return self.name
 
 
 class Meta:
@@ -83,3 +80,30 @@ class ProductComment(models.Model):
     deleted_at = models.DateTimeField(null=True)
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                 null=False)
+
+
+class productcarosel(models.Model):
+    name = models.CharField(max_length=100)
+    image = models.ImageField(null=True)
+
+    def save(self, *args, **kwargs):
+        # Gọi phương thức save của model cha
+        super().save(*args, **kwargs)
+        
+        # Kiểm tra xem có tệp tin ảnh được tải lên hay không
+        if self.image:
+            # Tạo đường dẫn cho tệp tin ảnh trên Cloudinary
+            cloudinary_path = f"images/{self.image.name}"
+            
+            # Tải tệp tin ảnh lên Cloudinary
+            uploaded_image = cloudinary.uploader.upload(self.image.path, public_id=cloudinary_path)
+            
+            # Cập nhật đường dẫn tới tệp tin ảnh đã tải lên Cloudinary
+            self.image = uploaded_image['secure_url']
+            
+            # Lưu lại thông tin của model sau khi đã cập nhật
+            super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+

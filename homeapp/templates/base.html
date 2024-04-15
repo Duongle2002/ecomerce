@@ -45,10 +45,7 @@
             max-height: 25rem;
             border-radius: 15px;
           }
-          .hover-nav:hover{
-            text-decoration: underline;
-            color: red;
-          }
+          
           .product-card {
             position: relative;
         }
@@ -79,13 +76,37 @@
         }
         .container {
           
-          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
           /* Thêm viền ngoài với độ dày 1px và màu sắc đen */
           border-radius: 15px;
         }
         #map {
           height: 500px;
           width: 100%;
+        }
+        .nav-link{
+          text-decoration: none;
+          letter-spacing: 0.15em;
+          
+          display: inline-block;
+          padding: 15px 20px;
+          position: relative;
+        }
+        .nav-link:after {    
+          background: none repeat scroll 0 0 transparent;
+          bottom: 0;
+          content: "";
+          display: block;
+          height: 2px;
+          left: 50%;
+          position: absolute;
+          background: #299555;
+          transition: width 0.3s ease 0s, left 0.3s ease 0s;
+          width: 0;
+        }
+        .nav-link:hover:after { 
+          width: 100%; 
+          left: 0; 
         }
         </style>
     </head>
@@ -122,16 +143,16 @@
               <div class="collapse navbar-collapse ms-5" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item mx-4">
-                    <a class="nav-link hover-nav fw-bold active " aria-current="page" href="/">TRANG CHỦ</a>
+                    <a class="nav-link  fw-bold active " aria-current="page" href="/">TRANG CHỦ</a>
                   </li>
                   <li class="nav-item mx-4">
-                    <a class="nav-link hover-nav fw-bold" href="{% url 'products:all_products' %}">SẢN PHẨM</a>
+                    <a class="nav-link fw-bold" href="{% url 'products:all_products' %}">SẢN PHẨM</a>
                   </li>
                   <li class="nav-item mx-4">
-                    <a class="nav-link hover-nav fw-bold" href="{% url 'introduce:introduces' %}">TIN TỨC</a>
+                    <a class="nav-link fw-bold" href="{% url 'introduce:introduces' %}">GIỚI THIỆU</a>
                   </li>
                   <li class="nav-item mx-4">
-                    <a class="nav-link hover-nav fw-bold" href="{% url 'introduce:contacts' %}">LIÊN HỆ</a>
+                    <a class="nav-link fw-bold" href="{% url 'introduce:contacts' %}">LIÊN HỆ</a>
                   </li>
                   
                 </ul>
@@ -157,9 +178,8 @@
                           {% endif %}
                       </a>
                       <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" href="#">Action</a></li>
                           {% if user.is_authenticated %}
-                              <li><a class="dropdown-item" href="{% url 'users:logout' %}"><i class="bi bi-box-arrow-left"></i> Logout</a></li>
+                              <li><a class="dropdown-item" href="{% url 'users:logout' %}"><i class="bi bi-box-arrow-left"></i> Đăng Xuất</a></li>
                           {% endif %}
                       </ul>
                   </li>

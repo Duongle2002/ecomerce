@@ -1,10 +1,10 @@
-{% extends "bases.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% block title  %}
     MiPlan Thanh toán đơn hàng
 {% endblock title  %}
-{% block view_cart %}
-<div class="container">
+{% block content %}
+<div class="">
     <div class="row my-5 ">
         <div class="col-7 border-end">
         <h2>Mi Plan</h2>
@@ -33,7 +33,7 @@
                         <a href="{% url 'users:login' %}">Đăng Nhập</a> <!-- Liên kết đến trang đăng nhập -->
                     {% endif %}
             
-                    <div class="container mb-5">
+                    <div class=" mb-5">
                       <h2>Thông tin giao hàng</h2>
                       <form id="orderForm" method="post" action="{% url 'cart:submit_order' %}">
                         {% csrf_token %}

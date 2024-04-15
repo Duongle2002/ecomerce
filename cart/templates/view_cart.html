@@ -5,8 +5,7 @@
 {% endblock title  %}
     {% block content %}
     
-    <div class="container">
-        <h1 class="mt-5">Cart</h1>
+    <div class="mt-5">
         {% if cart_items %}
         <div class="row">
 
@@ -14,6 +13,7 @@
             {% for item in cart_items %}
             <li class="list-group-item ">
                 <div class="row align-items-center">
+                    
                     <div class="col">{{ item.product.name }}</div>
                     <div class="col-auto price">{{ item.total_price|floatformat:0 }} ₫</div>
 

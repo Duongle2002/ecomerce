@@ -25,9 +25,18 @@
             var map = new Microsoft.Maps.Map(document.getElementById('map'), {
                 credentials: 'YOUR_BING_MAPS_API_KEY', // Thay YOUR_BING_MAPS_API_KEY bằng khóa API của bạn
                 center: new Microsoft.Maps.Location(16.03210, 108.22133), // Seattle, WA
-                zoom: 10
+                zoom: 18
             });
+            var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), {
+                draggable: true, // Cho phép kéo thả nút
+                icon: 'https://www.bingmapsportal.com/Content/images/poi_custom.png', // Đường dẫn đến biểu tượng của nút thả ghim
+                anchor: new Microsoft.Maps.Point(12, 39) // Điều chỉnh vị trí neo của nút thả ghim
+            });
+
+            // Thêm nút thả ghim vào bản đồ
+            map.entities.push(pushpin);
         }
+        
     </script>
 
     <!-- Nhúng thư viện JavaScript của Bing Maps -->

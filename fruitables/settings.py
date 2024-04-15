@@ -66,6 +66,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    
+    
 ]
 
 ROOT_URLCONF = 'fruitables.urls'
@@ -178,7 +180,27 @@ SWAGGER_SETTINGS = {
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
+from decouple import config
+
+# Lấy giá trị môi trường ALLOWED_HOSTS từ biến môi trường và chuyển đổi thành danh sách các host được phép
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
+
+# Lấy giá trị môi trường CORS_ALLOWED_ORIGINS từ biến môi trường và chuyển đổi thành danh sách các origin được phép
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000', cast=lambda v: [s.strip() for s in v.split(',')])
+
+# Lấy giá trị môi trường CORS_ALLOW_ALL_ORIGINS từ biến môi trường và chuyển đổi thành kiểu boolean
 CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', default=False, cast=bool)
-ALLOWED_HOSTS = ['your_domain.com', '127.0.0.1', 'localhost']
+
+# Thêm địa chỉ IP tĩnh vào danh sách ALLOWED_HOSTS
+ALLOWED_HOSTS += ['100.20.92.101']
+
+# Thêm địa chỉ IP tĩnh vào danh sách CORS_ALLOWED_ORIGINS
+
+
+# Nếu bạn muốn cho phép tất cả các origin, hãy sử dụng CORS_ALLOW_ALL_ORIGINS
+if CORS_ALLOW_ALL_ORIGINS:
+    CORS_ALLOWED_ORIGINS = ['*']
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://100.20.92.101',  # Thêm địa chỉ IP tĩnh vào danh sách
+]

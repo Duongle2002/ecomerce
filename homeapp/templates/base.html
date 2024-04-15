@@ -19,7 +19,6 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <link rel="shortcut icon" href="{% static 'image/4.jpg' %}" type="image/x-icon">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <meta name="csrf-token" content="{{ csrf_token }}">
         
@@ -43,7 +42,7 @@
             transform: scaleX(2);
           }
           .img-30{
-            max-height: 30rem;
+            max-height: 25rem;
             border-radius: 15px;
           }
           .hover-nav:hover{
@@ -78,27 +77,38 @@
             background-color: #007bff;
             border-color: #007bff;
         }
-        
+        .container {
+          
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+          /* Thêm viền ngoài với độ dày 1px và màu sắc đen */
+          border-radius: 15px;
+        }
+        #map {
+          height: 500px;
+          width: 100%;
+        }
         </style>
     </head>
     <body>
-           
       <ul class="nav bg-body-secondary justify-content-center ">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="duong100008@donga.edu.vn"><i class="bi bi-envelope"></i> duong100008@donga.edu.vn</a>
+          <a class="nav-link active font-monospace " aria-current="page" href="mailto:duong100008@donga.edu.vn"><i class="bi bi-envelope"></i> duong100008@donga.edu.vn</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled me-5" aria-disabled="true">Miễn phí giao hàng cho đơn hàng trên 200k</a>
+          <a class="nav-link disabled me-5 font-monospace " aria-disabled="true">Miễn phí giao hàng cho đơn hàng trên 200k</a>
         </li>
         <li class="nav-item justify-content-end ms-5">
-          <a class="nav-link active" aria-current="page" href="#"><i class="bi bi-facebook"></i></a>
+          <a class="nav-link active" aria-current="page" href="https://www.facebook.com/duongle08062002"><i class="bi bi-facebook"></i></a>
         </li>
         <li class="nav-item justify-content-end">
           <a class="nav-link" href="#"><i class="bi bi-messenger"></i></a>
         </li>
         <li class="nav-item justify-content-end">
-          <a class="nav-link" href="#">Zalo</a>
+          <a class="nav-link" href="https://zalo.me/0799457116"><img src="https://seeklogo.com/images/Z/zalo-logo-B0A0B2B326-seeklogo.com.png"  alt="" style="width:16px "></a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link " href="https://youtube.com/@DuongLeHuu-zg9bu?si=ALlQ5gqfsr7qlGFk"><i class="bi bi-youtube"></i></a>
+      </li> 
       </ul>
         <div class = "container">
           <nav class="navbar navbar-expand-lg ">
@@ -118,10 +128,10 @@
                     <a class="nav-link hover-nav fw-bold" href="{% url 'products:all_products' %}">SẢN PHẨM</a>
                   </li>
                   <li class="nav-item mx-4">
-                    <a class="nav-link hover-nav fw-bold" href="#">TIN TỨC</a>
+                    <a class="nav-link hover-nav fw-bold" href="{% url 'introduce:introduces' %}">TIN TỨC</a>
                   </li>
                   <li class="nav-item mx-4">
-                    <a class="nav-link hover-nav fw-bold" href="#">LIÊN HỆ</a>
+                    <a class="nav-link hover-nav fw-bold" href="{% url 'introduce:contacts' %}">LIÊN HỆ</a>
                   </li>
                   
                 </ul>
@@ -167,7 +177,7 @@
         
         
         <div class= "container">
-            <div class ="row ps-3 pe-3 border-top pt-4">
+            <div class ="row ps-3 pe-3  pt-4">
             <div class = 'col-4 '>
                 <h6>Chính sách</h6>
                   <nav class="nav flex-column">
@@ -213,7 +223,7 @@
                   <a class="nav-link font-monospace minisize-text" href="#"><i class="bi bi-whatsapp"></i></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link font-monospace minisize-text" href="https://zalo.me/0799457116">Zalo</a>
+                  <a class="nav-link font-monospace minisize-text" href="https://zalo.me/0799457116"><img src="https://seeklogo.com/images/Z/zalo-logo-B0A0B2B326-seeklogo.com.png"  alt="" style="width:8px "></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link font-monospace minisize-text" href="https://youtube.com/@DuongLeHuu-zg9bu?si=ALlQ5gqfsr7qlGFk"><i class="bi bi-youtube"></i></a>

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    Liên hệ - MiPlan
+{% endblock title %}
+{% block content %}
+    <div class="row">
+        <div class="col-6 my-5">
+            <h2>Liên hệ</h2>
+            <p><strong>Đà Nẵng:</strong> Trường Đại học Đông Á - 33 Xô Viết Nghệ Tĩnh, Hoà Cường Nam, Hải Châu, Đà Nẵng, Việt Nam</p>
+            <p><strong>Hotline:</strong> 0799457116</p>
+            <p><strong>Email:</strong><a href="mailto:duong100008@donga.edu.vn"> duong100008@donga.edu.vn</a></p>
+        
+        </div>
+        <div class="col-6 my-5">
+            <div class="bor" id="map"></div>
+        </div>
+        
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script type='text/javascript'>
+        function loadMapScenario() {
+            var map = new Microsoft.Maps.Map(document.getElementById('map'), {
+                credentials: 'YOUR_BING_MAPS_API_KEY', // Thay YOUR_BING_MAPS_API_KEY bằng khóa API của bạn
+                center: new Microsoft.Maps.Location(16.03210, 108.22133), // Seattle, WA
+                zoom: 10
+            });
+        }
+    </script>
+
+    <!-- Nhúng thư viện JavaScript của Bing Maps -->
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AuvZmWin0G48GNWesURBm2_LVgbZVrY7lSbJGc_51SuC9964JQQwgT0mCkgtllB7&callback=loadMapScenario' async defer></script>
+{% endblock %}

@@ -26,11 +26,11 @@
     </div>
     
     <div class="row">
-        <h1 class="mt-4">Danh mục nổi bật</h1>
-        <!-- Dùng vòng lặp for để duyệt qua danh sách các đối tượng từ model -->
-        {% for item in upsets %}
-        <div class="col-md-6 mb-4">
-            <div class="card">
+    <!-- Dùng vòng lặp for để duyệt qua danh sách các đối tượng từ model -->
+    {% for item in upsets %}
+    <div class="col-md-4 my-4">
+        <div class="card ">
+            <a href="#{{ forloop.counter }}" class="text-decoration-none text-dark">
                 <div class="row g-0">
                     <!-- Hình ảnh bên trái -->
                     <div class="col-md-5">
@@ -47,13 +47,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
-        {% endfor %}
     </div>
-  
+    {% endfor %}
+</div>
+
                     <div>
-                      <h1>Cây phổ biến</h1>
+                      <h1 id ="1">Cây trong nhà</h1>
                       <div class="row row-cols-1 row-cols-md-5 g-4">
                           {% for product in popular_products %}
                           <div class="col">
@@ -78,14 +79,9 @@
                       </div>
                   </div>
                   <div class="row">
-                      <h1 class="mt-4 caydeban">Cây mini để bàn</h1>
-                      <div class="col-6">
-                          <div class="card mb-3" style="max-width: 540px;">
-                              <img src="{{ mini_desktop_plant.product_images }}" class="img-fluid rounded-start" alt="...">
-                          </div>
-                      </div>
-                      <div class="col-6">
-                          <div class="row row-cols-1 row-cols-md-2 g-4">
+                      <h1 class="mt-4 caydeban" id="2">Cây ngoài trời</h1>
+                      <div class="">
+                          <div class="row row-cols-1 row-cols-md-4 g-4">
                               {% for product in mini_desktop_plants %}
                               <div class="col">
                                 <div class="card h-100">
@@ -112,10 +108,9 @@
 
 
                               
-                  <div>
-                    <h1>Cây trong nhà</h1>
+                  <div class="my-4">
+                    <h1 id ="3">Cây mini để bàn</h1>
                     <!-- Hiển thị sản phẩm banner cho cây trong nhà -->
-                    <img src="{{ indoor_plant_banner.product_images }}" alt="Indoor Plant Banner">
                     <div class="row row-cols-1 row-cols-md-4 g-4">
                         {% for product in indoor_plants %}
                         <div class="col">

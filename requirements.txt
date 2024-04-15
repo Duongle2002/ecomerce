@@ -36,16 +36,3 @@ tzdata==2024.1
 uritemplate==4.1.1
 urllib3==2.2.1
 whitenoise==6.6.0
-django
-djangorestframework
-djangorestframework_simplejwt
-django-cors-headers
-djoser
-requests
-cloudinary
-python-decouple
-psycopg2-binary
-dj-database-url
-drf-yasg
-gunicorn
-whitenoise
